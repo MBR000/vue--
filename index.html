@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <div v-if="show==1">
+            <p>1.你的性别</p>
+            <input v-model="gender" @click="updatedis1" type="radio" name="gender" value="男"/>男
+            <input v-model="gender" @click="updatedis1" type="radio" name="gender" value="女" />女
+            <input v-model="gender" @click="updatedis1" type="radio" name="gender" value="保密" />保密
+            <div>
+                <button @click="phase" type="button" :disabled="dis1">下一步</button>
+                
+                <button @click="update1">重置</button>
+            </div>
+        </div>
+        <div v-if="show==2">
+            <p>兴趣爱好</p>
+            <input v-model="activity" type="checkbox" name="fruit" value="看书"/>看书
+            <input v-model="activity" type="checkbox" name="fruit" value="游泳"/>游泳
+            <input v-model="activity" type="checkbox" name="fruit" value="吃饭"/>吃饭
+            <input v-model="activity" type="checkbox" name="fruit" value="睡觉"/>睡觉
+            <div>
+                <button @click="phase" type="button" :disabled="dis2">下一步</button>
+                <button @click="descphase" type="button">上一步</button>
+                <button @click="update2">重置</button>
+            </div>
+        </div>
+        <div v-if="show==3">
+            <p>介绍自己</p>
+            <textarea v-model="text"></textarea>
+            <div>
+                <button @click="submit" type="button" :disabled="dis3">提交</button>
+                <button @click="descphase" type="button">上一步</button>
+                <button @click="update3">重置</button>
+            </div>
+        </div>
+    </div>
+    
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    var App = new Vue({
+        el: '#app',
+        data:{
+            show: 1,
+            gender:'',
+            dis1: true,
+            dis2: true,
+            dis3: true,
+            activity:[],
+            text:''
+        },
+        methods:{
+            updatedis1: function(){
+                this.dis1 = false
+            },
+            update1 : function(){
+                this.dis1 = true;
+                this.gender = ''
+            },
+            phase: function(){
+                this.show++
+            },
+            descphase: function(){
+                this.show--
+            },
+            update2: function(){
+                this.dis2 = true;
+                this.activity = []
+            },
+            update3: function(){
+                this.dis3 = true;
+                this.text = ''
+            },
+            submit: function(){
+                console.log('submit')
+                console.log(this.gender)
+                console.log(this.activity)
+                console.log(this.text)
+            }
+        },
+        watch:{
+            activity: {
+                handler(ne,old) { //特别注意，不能用箭头函数，箭头函数，this指向全局
+                    if(ne.length > 0)
+                        this.dis2 = false
+                    else
+                        this.dis2 = true
+                },
+                deep: true  // 可以深度检测到 obj 对象的属性值的变化
+            },
+            text:{
+                handler(ne,old) { //特别注意，不能用箭头函数，箭头函数，this指向全局
+                    if(ne.length > 0)
+                        this.dis3 = false
+                    else
+                        this.dis3 = true
+                },
+            }
+        }
+
+    })
+</script>
+</html>
